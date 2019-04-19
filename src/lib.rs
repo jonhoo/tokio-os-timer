@@ -52,7 +52,7 @@ impl Delay {
             },
             it_value: libc::timespec {
                 tv_sec: delay.as_secs() as i64,
-                tv_nsec: delay.subsec_nanos() as i64,
+                tv_nsec: i64::from(delay.subsec_nanos()),
             },
         };
         let ret = unsafe { libc::timerfd_settime(*tfd, 0, &timer, std::ptr::null_mut()) };
