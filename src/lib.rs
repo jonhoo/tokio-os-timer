@@ -4,7 +4,7 @@
 //! your operating system where `tokio-timer` can only support timers with a granularity of 1ms.
 //!
 //! The current implementation relies on [`timerfd_create(2)`], and will thus only work on
-//! platforms whose `libc` contains that call.
+//! platforms whose `libc` contains that call (probably just Linux at the moment).
 //!
 //!   [`tokio-timer`]: https://docs.rs/tokio-timer/
 //!   [`timerfd_create(2)`]: https://linux.die.net/man/2/timerfd_settime

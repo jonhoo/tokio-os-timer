@@ -17,6 +17,8 @@ script:
 jobs:
   allow_failures:
     - rust: nightly
+    - os: windows
+    - os: osx
   include:
     - &check
       stage: check # do a pre-screen to make sure this is even worth testing
@@ -28,8 +30,8 @@ jobs:
     - stage: test # then run the tests
       rust: stable
       os: osx
-#    - rust: stable
-#      os: windows
+    - rust: stable
+      os: windows
     - &linux
       stage: test
       rust: stable
