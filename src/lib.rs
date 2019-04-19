@@ -12,9 +12,9 @@
 #![deny(missing_docs)]
 
 mod delay;
-pub use delay::Delay;
+pub use self::delay::Delay;
 
 mod interval;
-pub use interval::Interval;
+pub use self::interval::Interval;
 
 mod sys;
