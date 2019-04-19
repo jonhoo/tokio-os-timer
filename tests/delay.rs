@@ -61,6 +61,6 @@ fn delayed() {
             mock.enter(|| assert_not_ready!(t));
         }
         // make sure delay and this are co-prime
-        std::thread::sleep(Duration::from_millis(7));
+        std::thread::sleep(Duration::from_millis(66));
     }
 }
