@@ -1,4 +1,4 @@
-use crate::sys::Timer;
+use crate::sys::{TimeSpec, Timer};
 use futures::{try_ready, Async, Poll, Stream};
 use std::io;
 use std::time::Duration;
@@ -22,18 +22,7 @@ impl Interval {
         let mut timer = tokio_reactor::PollEvented::new(Timer::new()?);
 
         // arm the timer
-        timer.get_mut().set(libc::itimerspec {
-            // first expiry
-            it_value: libc::timespec {
-                tv_sec: interval.as_secs() as i64,
-                tv_nsec: i64::from(interval.subsec_nanos()),
-            },
-            // subsequent expiry intervals
-            it_interval: libc::timespec {
-                tv_sec: interval.as_secs() as i64,
-                tv_nsec: i64::from(interval.subsec_nanos()),
-            },
-        })?;
+        timer.get_mut().set(TimeSpec::Interval(interval))?;
 
         Ok(Self { e: Some(timer) })
     }

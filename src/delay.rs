@@ -1,4 +1,4 @@
-use crate::sys::Timer;
+use crate::sys::{TimeSpec, Timer};
 use futures::{try_ready, Async, Future, Poll};
 use std::io;
 use std::time::Duration;
@@ -21,16 +21,7 @@ impl Delay {
         let mut timer = tokio_reactor::PollEvented::new(Timer::new()?);
 
         // arm the timer
-        timer.get_mut().set(libc::itimerspec {
-            it_interval: libc::timespec {
-                tv_sec: 0,
-                tv_nsec: 0,
-            },
-            it_value: libc::timespec {
-                tv_sec: delay.as_secs() as i64,
-                tv_nsec: i64::from(delay.subsec_nanos()),
-            },
-        })?;
+        timer.get_mut().set(TimeSpec::Timeout(delay))?;
 
         Ok(Self { e: Some(timer) })
     }

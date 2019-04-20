@@ -18,6 +18,7 @@ libc = "0.2"
 mio = "0.6"
 tokio-reactor = "0.1"
 futures = "0.1"
+nix = "0.13.0"
 
 [dev-dependencies]
 tokio-mock-task = "0.1.0"
