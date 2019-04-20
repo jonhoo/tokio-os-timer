@@ -40,14 +40,12 @@ impl Future for Delay {
     type Item = ();
     type Error = io::Error;
     fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
-        if self.e.is_none() {
-            return Ok(Async::Ready(()));
+        if let Some(ref mut e) = self.e {
+            let ready = mio::Ready::readable();
+            let _ = try_ready!(e.poll_read_ready(ready));
+            // we don't ever _actually_ need to check the timerfd
+            e.clear_read_ready(ready)?;
         }
-
-        let ready = mio::Ready::readable();
-        let _ = try_ready!(self.e.as_mut().unwrap().poll_read_ready(ready));
-        // we don't ever _actually_ need to check the timerfd
-        self.e.as_mut().unwrap().clear_read_ready(ready)?;
         Ok(Async::Ready(()))
     }
 }

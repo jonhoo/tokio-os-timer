@@ -43,23 +43,23 @@ impl Stream for Interval {
     type Item = ();
     type Error = io::Error;
     fn poll(&mut self) -> Poll<Option<Self::Item>, Self::Error> {
-        if self.e.is_none() {
-            return Ok(Async::Ready(Some(())));
-        }
+        if let Some(ref mut e) = self.e {
+            let ready = mio::Ready::readable();
+            try_ready!(e.poll_read_ready(ready));
 
-        let ready = mio::Ready::readable();
-        try_ready!(self.e.as_mut().unwrap().poll_read_ready(ready));
-
-        // do a read to reset
-        match self.e.as_mut().unwrap().get_mut().check() {
-            Ok(_) => Ok(Async::Ready(Some(()))),
-            Err(e) => {
-                if e.kind() == io::ErrorKind::WouldBlock {
-                    self.e.as_mut().unwrap().clear_read_ready(ready)?;
-                    return Ok(Async::NotReady);
+            // do a read to reset
+            match e.get_mut().check() {
+                Ok(_) => Ok(Async::Ready(Some(()))),
+                Err(err) => {
+                    if err.kind() == io::ErrorKind::WouldBlock {
+                        e.clear_read_ready(ready)?;
+                        return Ok(Async::NotReady);
+                    }
+                    Err(err)
                 }
-                Err(e)
             }
+        } else {
+            Ok(Async::Ready(Some(())))
         }
     }
 }
