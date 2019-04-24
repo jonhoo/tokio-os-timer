@@ -1,4 +1,4 @@
-use crate::sys::Timer;
+use crate::sys::{TimeSpec, Timer};
 use futures::{try_ready, Async, Future, Poll};
 use std::io;
 use std::time::Duration;
@@ -7,7 +7,7 @@ use std::time::Duration;
 ///
 /// Instances of `Delay` perform no work and complete with `()` once the specified duration has been passed.
 pub struct Delay {
-    e: Option<tokio_reactor::PollEvented<Timer>>,
+    e: Option<Timer>,
 }
 
 impl Delay {
@@ -18,19 +18,10 @@ impl Delay {
             return Ok(Self { e: None });
         }
 
-        let mut timer = tokio_reactor::PollEvented::new(Timer::new()?);
+        let mut timer = Timer::new()?;
 
         // arm the timer
-        timer.get_mut().set(libc::itimerspec {
-            it_interval: libc::timespec {
-                tv_sec: 0,
-                tv_nsec: 0,
-            },
-            it_value: libc::timespec {
-                tv_sec: delay.as_secs() as i64,
-                tv_nsec: i64::from(delay.subsec_nanos()),
-            },
-        })?;
+        timer.set(TimeSpec::Timeout(delay))?;
 
         Ok(Self { e: Some(timer) })
     }
@@ -41,10 +32,7 @@ impl Future for Delay {
     type Error = io::Error;
     fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
         if let Some(ref mut e) = self.e {
-            let ready = mio::Ready::readable();
-            let _ = try_ready!(e.poll_read_ready(ready));
-            // we don't ever _actually_ need to check the timerfd
-            e.clear_read_ready(ready)?;
+            try_ready!(e.poll());
         }
         Ok(Async::Ready(()))
     }

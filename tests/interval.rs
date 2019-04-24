@@ -50,15 +50,21 @@ fn immediate() {
 #[test]
 fn delayed() {
     let mut mock = tokio_mock_task::MockTask::new();
-    let interval = Duration::from_millis(10);
+    let interval = Duration::from_millis(500);
     let mut t = Interval::new(interval).unwrap();
     mock.enter(|| assert_not_ready!(t));
+    // sleep until a time when timer still hasn't expired
+    std::thread::sleep(Duration::from_millis(250));
+    mock.enter(|| assert_not_ready!(t));
     // sleep until interval has passed
-    std::thread::sleep(Duration::from_millis(15));
+    std::thread::sleep(Duration::from_millis(500));
     assert!(mock.enter(|| assert_ready!(t)).is_some());
     mock.enter(|| assert_not_ready!(t));
+    // sleep until a time when timer still hasn't expired
+    std::thread::sleep(Duration::from_millis(100));
+    mock.enter(|| assert_not_ready!(t));
     // sleep until interval has passed again
-    std::thread::sleep(Duration::from_millis(10));
+    std::thread::sleep(Duration::from_millis(300));
     assert!(mock.enter(|| assert_ready!(t)).is_some());
     mock.enter(|| assert_not_ready!(t));
 }

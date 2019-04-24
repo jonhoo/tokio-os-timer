@@ -13,16 +13,12 @@ whatever granularity the underlying hardware supports (see
 
 ## Platform support
 
-The current implementation relies on [`timerfd_create(2)`], and will
-thus only work on platforms whose `libc` contains that call (probably
-just Linux at the moment). A partial macOS/BSD implementation based on
-[kqueue] exists in
-[#6](https://github.com/jonhoo/tokio-os-timer/pull/6), but needs
-debugging from someone using one of those platforms. Windows support is
-sadly unlikely to appear
+The current implementation uses [`timerfd_create(2)`] on Linux, and
+[`kqueue(2)` timers] on macOS and BSDs. Windows support is sadly
+unlikely to appear
 ([#9](https://github.com/jonhoo/tokio-os-timer/issues/9)).
 
   [`tokio-timer`]: https://docs.rs/tokio-timer/
   [`timerfd_create(2)`]: https://linux.die.net/man/2/timerfd_settime
-  [kqueue]: https://man.openbsd.org/kqueue.2
+  [`kqueue(2)` timers]: https://man.openbsd.org/kqueue.2
   [`time(7)`]: https://linux.die.net/man/7/time
