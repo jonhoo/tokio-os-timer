@@ -23,13 +23,13 @@ mod kqueue;
     target_os = "netbsd",
     target_os = "openbsd"
 ))]
-use kqueue::Timer as SysTimer;
+use self::kqueue::Timer as SysTimer;
 
 #[cfg(any(target_os = "linux", target_os = "android", target_os = "solaris"))]
 mod timerfd;
 
 #[cfg(any(target_os = "linux", target_os = "android", target_os = "solaris"))]
-use timerfd::Timer as SysTimer;
+use self::timerfd::Timer as SysTimer;
 
 pub(crate) enum TimeSpec {
     Timeout(Duration),
