@@ -93,6 +93,11 @@ impl mio::Evented for Timer {
         interest: Ready,
         opts: PollOpt,
     ) -> io::Result<()> {
+        let interest = if interest.contains(Ready::readable()) {
+            Ready::readable()
+        } else {
+            Ready::empty()
+        };
         EventedFd(&self.0).register(poll, token, interest, opts)
     }
 
@@ -103,6 +108,11 @@ impl mio::Evented for Timer {
         interest: Ready,
         opts: PollOpt,
     ) -> io::Result<()> {
+        let interest = if interest.contains(Ready::readable()) {
+            Ready::readable()
+        } else {
+            Ready::empty()
+        };
         EventedFd(&self.0).reregister(poll, token, interest, opts)
     }
 
