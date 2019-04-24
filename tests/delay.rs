@@ -1,7 +1,7 @@
 // heavily copied from https://github.com/tokio-rs/tokio/blob/master/tokio-timer/tests/delay.rs
 
 use futures::Future;
-use std::time::{Duration, Instant};
+use std::time::Duration;
 use tokio_os_timer::Delay;
 
 macro_rules! assert_ready {

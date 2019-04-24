@@ -7,7 +7,7 @@ use std::time::Duration;
 ///
 /// Instances of `Interval` perform no work.
 pub struct Interval {
-    e: Option<tokio_reactor::PollEvented<Timer>>,
+    e: Option<Timer>,
 }
 
 impl Interval {
@@ -19,10 +19,10 @@ impl Interval {
             return Ok(Self { e: None });
         }
 
-        let mut timer = tokio_reactor::PollEvented::new(Timer::new()?);
+        let mut timer = Timer::new()?;
 
         // arm the timer
-        timer.get_mut().set(TimeSpec::Interval(interval))?;
+        timer.set(TimeSpec::Interval(interval))?;
 
         Ok(Self { e: Some(timer) })
     }
@@ -33,22 +33,8 @@ impl Stream for Interval {
     type Error = io::Error;
     fn poll(&mut self) -> Poll<Option<Self::Item>, Self::Error> {
         if let Some(ref mut e) = self.e {
-            let ready = mio::Ready::readable();
-            try_ready!(e.poll_read_ready(ready));
-
-            // do a read to reset
-            match e.get_mut().check() {
-                Ok(_) => Ok(Async::Ready(Some(()))),
-                Err(err) => {
-                    if err.kind() == io::ErrorKind::WouldBlock {
-                        e.clear_read_ready(ready)?;
-                        return Ok(Async::NotReady);
-                    }
-                    Err(err)
-                }
-            }
-        } else {
-            Ok(Async::Ready(Some(())))
+            try_ready!(e.poll());
         }
+        Ok(Async::Ready(Some(())))
     }
 }
