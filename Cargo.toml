@@ -13,7 +13,7 @@ readme = "README.md"
 [badges]
 travis-ci = { repository = "jonhoo/tokio-os-timer" }
 cirrus-ci = { repository = "jonhoo/tokio-os-timer" }
-maintenance = { status = "experimental" }
+maintenance = { status = "passive-maintenance" }
 
 [dependencies]
 libc = "0.2"
