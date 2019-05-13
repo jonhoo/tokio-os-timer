@@ -1,6 +1,6 @@
 [package]
 name = "tokio-os-timer"
-version = "0.1.5"
+version = "0.1.6"
 authors = ["Jon Gjengset <jon@thesquareplanet.com>"]
 edition = "2018"
 license = "MIT"
@@ -13,7 +13,7 @@ readme = "README.md"
 [badges]
 travis-ci = { repository = "jonhoo/tokio-os-timer" }
 cirrus-ci = { repository = "jonhoo/tokio-os-timer" }
-maintenance = { status = "passive-maintenance" }
+maintenance = { status = "passively-maintained" }
 
 [dependencies]
 libc = "0.2"
