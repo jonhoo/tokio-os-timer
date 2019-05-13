@@ -4,6 +4,8 @@
 //! your operating system where `tokio-timer` can only support timers with a granularity of 1ms.
 //! In particular, the system timers usually support whatever granularity the underlying hardware
 //! supports (see "High-resolution timers" in [`time(7)`]), which on my laptop is 1ns!
+//! Realistically, you won't be able to make your timers higher resolution than how long system
+//! calls on your system take, which is usually on the order of hundreds of nanoseconds.
 //!
 //! The current implementation uses [`timerfd_create(2)`] on Linux, and [`kqueue(2)` timers] on
 //! macOS and BSDs.
