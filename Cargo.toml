@@ -1,6 +1,6 @@
 [package]
 name = "tokio-os-timer"
-version = "0.1.6"
+version = "0.1.7"
 authors = ["Jon Gjengset <jon@thesquareplanet.com>"]
 edition = "2018"
 license = "MIT"
@@ -20,7 +20,7 @@ libc = "0.2"
 mio = "0.6"
 tokio-reactor = "0.1"
 futures = "0.1"
-nix = "0.13.0"
+nix = "0.14.0"
 
 [dev-dependencies]
 tokio-mock-task = "0.1.0"
