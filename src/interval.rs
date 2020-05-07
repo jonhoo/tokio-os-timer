@@ -13,6 +13,7 @@ pub struct Interval {
 impl Interval {
     /// Create a new `Interval` instance that yields at now + `interval`, and every subsequent
     /// `interval`.
+    #[deprecated(since = "0.1.8", note = "Please use the async-timer crate")]
     pub fn new(interval: Duration) -> io::Result<Self> {
         if interval.as_secs() == 0 && interval.subsec_nanos() == 0 {
             // this would be interpreted as "inactive timer" by timerfd_settime

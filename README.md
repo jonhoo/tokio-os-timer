@@ -3,6 +3,10 @@
 [![Travis Build Status](https://travis-ci.com/jonhoo/tokio-os-timer.svg?branch=master)](https://travis-ci.com/jonhoo/tokio-os-timer)
 [![Cirrus CI Build Status](https://api.cirrus-ci.com/github/jonhoo/tokio-os-timer.svg)](https://cirrus-ci.com/github/jonhoo/tokio-os-timer)
 
+**This crate is deprecated. Please use
+[`async-timer`](https://github.com/DoumanAsh/async-timer) with the
+`tokio_on` feature enabled instead.**
+
 This crate provides timers for use with tokio that rely on OS mechanisms
 for timer management rather than a separate timing mechanism like
 [`tokio-timer`]. This comes at somewhat increased overhead if you have

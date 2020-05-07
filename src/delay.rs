@@ -12,6 +12,7 @@ pub struct Delay {
 
 impl Delay {
     /// Create a new `Delay` instance that elapses at now + `delay`.
+    #[deprecated(since = "0.1.8", note = "Please use the async-timer crate")]
     pub fn new(delay: Duration) -> io::Result<Self> {
         if delay.as_secs() == 0 && delay.subsec_nanos() == 0 {
             // this would be interpreted as "inactive timer" by timerfd_settime
